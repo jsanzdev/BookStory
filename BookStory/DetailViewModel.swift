@@ -15,6 +15,7 @@ final class DetailViewModel:ObservableObject {
     let book:Book
     
     @Published var author = ""
+    @Published var pages = ""
     
     init(book:Book) {
         self.book = book

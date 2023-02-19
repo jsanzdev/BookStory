@@ -24,7 +24,7 @@ struct ContentView: View {
             }
             .navigationTitle("BookStory")
             .navigationDestination(for: Book.self) { book in
-                // Add detail view here :)
+                BookDetailView(detailVM: DetailViewModel(book: book))
             }
             .refreshable {
                 await vm.getBooks()

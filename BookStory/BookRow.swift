@@ -11,25 +11,38 @@ struct BookRow: View {
     @ObservedObject var detailVM:DetailViewModel
     
     var body: some View {
-        HStack {
-            AsyncImage(url: detailVM.book.cover) { image in
-                image
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 70)
-            } placeholder: {
-                Image(systemName: "book.closed.fill")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 50)
-            }
-            VStack(alignment: .leading) {
-                Text("\(detailVM.book.title)")
-                    .font(.headline)
-                Text("\(detailVM.author)")
+        VStack {
+            HStack {
+                AsyncImage(url: detailVM.book.cover) { image in
+                    image
+                        .resizable()
+                        .scaledToFit()
+                } placeholder: {
+                    Image(systemName: "book.closed.fill")
+                        .resizable()
+                        .scaledToFit()
+                }
+                .cornerRadius(10)
+                .shadow(radius: 10)
+                VStack(alignment: .leading) {
+                    Text("\(detailVM.book.title)")
+                        .font(.headline)
+                    Text("\(detailVM.author)")
+                        .font(.callout)
+                    Text("\(detailVM.book.plot ?? "")")
+                        .font(.caption2)
+                    Spacer()
+                    HStack {
+                        RatingView(rating: detailVM.book.rating?.toInt() ?? 0)
+                        Spacer()
+                        Text("Year: \(detailVM.book.year)")
+                    }
                     .font(.caption)
+                }
             }
         }
+        .frame(height: 110)
+        .padding(5)
     }
 }
 
