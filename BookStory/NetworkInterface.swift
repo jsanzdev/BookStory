@@ -47,7 +47,8 @@ extension URL {
     static let productionServer = URL(string: "https://trantorapi-acacademy.herokuapp.com/api")!
     static let bookAPI = "books"
     static let getBooks = serverURL.appending(component: "\(bookAPI)").appending(component: "list")
-    static let getLatest = serverURL.appending(component: "books/latest")
+    static let getLatest = serverURL.appending(component: "\(bookAPI)").appending(component: "latest")
+    static let getAuthors = serverURL.appending(component: "\(bookAPI)").appending(component: "authors")
     
     static func findBook(search:String) -> URL {
         serverURL.appending(component: "find").appending(component: "\(search.lowercased())")

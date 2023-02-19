@@ -8,11 +8,11 @@
 import SwiftUI
 
 struct BookRow: View {
-    let book:Book
+    @ObservedObject var detailVM:DetailViewModel
     
     var body: some View {
         HStack {
-            AsyncImage(url: book.cover) { image in
+            AsyncImage(url: detailVM.book.cover) { image in
                 image
                     .resizable()
                     .scaledToFit()
@@ -24,9 +24,9 @@ struct BookRow: View {
                     .frame(width: 50)
             }
             VStack(alignment: .leading) {
-                Text("\(book.title)")
+                Text("\(detailVM.book.title)")
                     .font(.headline)
-                Text(book.author)
+                Text("\(detailVM.author)")
                     .font(.caption)
             }
         }
@@ -35,6 +35,6 @@ struct BookRow: View {
 
 struct BookRow_Previews: PreviewProvider {
     static var previews: some View {
-        BookRow(book: .bookTest)
+        BookRow(detailVM: DetailViewModel(book: .bookTest))
     }
 }

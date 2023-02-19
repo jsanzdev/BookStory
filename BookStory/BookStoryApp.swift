@@ -16,7 +16,7 @@ struct BookStoryApp: App {
     var body: some Scene {
         WindowGroup {
             VStack {
-                ContentView()
+                TabController()
             }
             .overlay {
                 if monitorNetwork.status == .offline {

@@ -1,13 +1,13 @@
 //
-//  ContentView.swift
+//  LatestView.swift
 //  BookStory
 //
-//  Created by Jesus Sanz on 6/2/23.
+//  Created by Jesus Sanz on 19/2/23.
 //
 
 import SwiftUI
 
-struct ContentView: View {
+struct LatestView: View {
     @EnvironmentObject var vm:BooksViewModel
     
     let loading = NotificationCenter.default
@@ -17,17 +17,17 @@ struct ContentView: View {
     
     var body: some View {
         NavigationStack {
-            List(vm.books) { book in
+            List(vm.latest) { book in
                 NavigationLink(value: book) {
                     BookRow(detailVM: DetailViewModel(book: book))
                 }
             }
-            .navigationTitle("BookStory")
+            .navigationTitle("Latest Books")
             .navigationDestination(for: Book.self) { book in
                 // Add detail view here :)
             }
             .refreshable {
-                await vm.getBooks()
+                await vm.getLatest()
             }
         }
         .alert("Connection Error", isPresented: $vm.showAlert) {
@@ -43,17 +43,16 @@ struct ContentView: View {
                     .transition(.opacity)
             }
         }
-    
     }
 }
 
-struct ContentView_Previews: PreviewProvider {
+struct LatestView_Previews: PreviewProvider {
     static let vm = BooksViewModel()
     static var previews: some View {
-        ContentView()
+        LatestView()
             .environmentObject(vm)
             .task {
-                await vm.getBooks()
+                await vm.getLatest()
             }
     }
 }

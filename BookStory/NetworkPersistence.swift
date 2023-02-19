@@ -14,6 +14,15 @@ final class NetworkPersistence {
         try await queryJSON(request: .request(url: .getBooks), type: [Book].self)
     }
     
+    func getLatest() async throws -> [Book] {
+        try await queryJSON(request: .request(url: .getLatest), type: [Book].self)
+    }
+    
+    func getAuthors() async throws -> [Author] {
+        try await queryJSON(request: .request(url: .getAuthors), type: [Author].self)
+    }
+
+    
     
     
     

@@ -12,6 +12,8 @@ final class BooksViewModel:ObservableObject {
     let persistence = NetworkPersistence.shared
     
     @Published var books:[Book] = []
+    @Published var latest:[Book] = []
+    @Published var authors:[Author] = []
     
     @Published var showAlert = false
     @Published var errorMsg = ""
@@ -35,6 +37,7 @@ final class BooksViewModel:ObservableObject {
     @MainActor func getBooks() async {
         loading = true
         do {
+            authors = try await persistence.getAuthors()
             books = try await persistence.getBooks().sorted {$0.id < $1.id }
         } catch let error as APIErrors {
             errorMsg = error.description
@@ -44,5 +47,25 @@ final class BooksViewModel:ObservableObject {
             showAlert.toggle()
         }
         loading = false
+    }
+    
+    @MainActor func getLatest() async {
+        loading = true
+        do {
+            authors = try await persistence.getAuthors()
+            latest = try await persistence.getLatest().sorted {$0.id < $1.id }
+        } catch let error as APIErrors {
+            errorMsg = error.description
+            showAlert.toggle()
+        } catch {
+            errorMsg = error.localizedDescription
+            showAlert.toggle()
+        }
+        loading = false
+    }
+    
+    
+    func getAuthorByID(id:String) -> Author? {
+        authors.first(where: { $0.id == id })
     }
 }
