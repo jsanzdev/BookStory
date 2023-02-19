@@ -22,9 +22,9 @@ final class NetworkPersistence {
         try await queryJSON(request: .request(url: .getAuthors), type: [Author].self)
     }
 
-    
-    
-    
+    func findBooks(search:String) async throws -> [Book] {
+        try await queryJSON(request: .request(url: .findBook(search: search)), type: [Book].self)
+    }
     
     
     func queryJSON<T:Codable>(request:URLRequest, type:T.Type, decoder:JSONDecoder = JSONDecoder(), statusOK:Int = 200) async throws -> T {

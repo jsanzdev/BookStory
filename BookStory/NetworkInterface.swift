@@ -51,7 +51,7 @@ extension URL {
     static let getAuthors = serverURL.appending(component: "\(bookAPI)").appending(component: "authors")
     
     static func findBook(search:String) -> URL {
-        serverURL.appending(component: "find").appending(component: "\(search.lowercased())")
+        serverURL.appending(component: "\(bookAPI)").appending(component: "find").appending(component: "\(search.lowercased())")
     }
 }
 

@@ -22,6 +22,9 @@ final class BooksViewModel:ObservableObject {
     
     @Published var loading = false
     
+    @Published var search = ""
+    @Published var bookSearch:[Book] = []
+    
     
     var subscribers = Set<AnyCancellable>()
     
@@ -54,6 +57,20 @@ final class BooksViewModel:ObservableObject {
         do {
             authors = try await persistence.getAuthors()
             latest = try await persistence.getLatest().sorted {$0.id < $1.id }
+        } catch let error as APIErrors {
+            errorMsg = error.description
+            showAlert.toggle()
+        } catch {
+            errorMsg = error.localizedDescription
+            showAlert.toggle()
+        }
+        loading = false
+    }
+    
+    @MainActor func findBook(search:String) async {
+        loading = true
+        do {
+            bookSearch = try await persistence.findBooks(search: search)
         } catch let error as APIErrors {
             errorMsg = error.description
             showAlert.toggle()
