@@ -6,12 +6,29 @@
 //
 
 import SwiftUI
+import WebKit
 
 @main
 struct BookStoryApp: App {
+    @StateObject var booksVM = BooksViewModel()
+    @StateObject var monitorNetwork = NetworkStatus()
+    
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            VStack {
+                ContentView()
+            }
+            .overlay {
+                if monitorNetwork.status == .offline {
+                    AppOfflineView()
+                        .transition(.opacity)
+                }
+            }
+            .task {
+                await booksVM.getBooks()
+            }
+            .animation(.default, value: monitorNetwork.status)
+            .environmentObject(booksVM)
         }
     }
 }
