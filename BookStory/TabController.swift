@@ -16,15 +16,11 @@ struct TabController: View {
                 }
             LatestView()
                 .tabItem {
-                    Label("Latest", systemImage: "book.closed.fill")
+                    Label("Latests", systemImage: "book.closed.fill")
                 }
-            FavoritesView()
+            ReadView()
                 .tabItem {
-                    Label("Favourites", systemImage: "star")
-                }
-            SearchView()
-                .tabItem {
-                    Label("Search", systemImage: "magnifyingglass")
+                    Label("Read", systemImage: "bookmark.fill")
                 }
         }
     }

@@ -11,14 +11,14 @@ import Combine
 final class DetailViewModel:ObservableObject {
     
     let booksVM = BooksViewModel()
+    let persistence = NetworkPersistence()
     
     let book:Book
     
-    @Published var author = ""
-    @Published var pages = ""
+    @Published var authorName = ""
     
     init(book:Book) {
         self.book = book
-        author = booksVM.getAuthorByID(id: book.author)?.name ?? "Author not found"
+        authorName = booksVM.getAuthorByID(id: book.author)?.name ?? "Author not found"
     }
 }

@@ -31,7 +31,7 @@ struct BookDetailView: View {
                             .cornerRadius(10)
                             .shadow(radius:10)
                             VStack (alignment: .leading){
-                                Text("\(detailVM.author)")
+                                Text("\(detailVM.authorName)")
                                     .font(.title)
                                 Spacer()
                                 Text("Year: \(detailVM.book.year)")

@@ -4,6 +4,7 @@
 //
 //  Created by Jesus Sanz on 19/2/23.
 //
+// Search was integrated into the content view :)
 
 import SwiftUI
 

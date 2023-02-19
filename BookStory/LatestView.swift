@@ -30,6 +30,13 @@ struct LatestView: View {
                 await vm.getLatest()
             }
         }
+        .onAppear {
+            Task {
+                do {
+                    await vm.getLatest()
+                }
+            }
+        }
         .alert("Connection Error", isPresented: $vm.showAlert) {
             Button(action: {}) {
                 Text("OK")

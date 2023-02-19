@@ -17,17 +17,41 @@ struct ContentView: View {
     
     var body: some View {
         NavigationStack {
-            List(vm.books) { book in
-                NavigationLink(value: book) {
-                    BookRow(detailVM: DetailViewModel(book: book))
+            if vm.search.isEmpty {
+                List(vm.books) { book in
+                    NavigationLink(value: book) {
+                        BookRow(detailVM: DetailViewModel(book: book))
+                    }
+                }
+                .navigationTitle("BookStory")
+                .navigationDestination(for: Book.self) { book in
+                    BookDetailView(detailVM: DetailViewModel(book: book))
+                }
+                .refreshable {
+                    await vm.getBooks()
+                }
+            } else {
+                List(vm.bookSearch) { book in
+                    NavigationLink(value: book) {
+                        BookRow(detailVM: DetailViewModel(book: book))
+                    }
+                }
+                .navigationTitle("BookStory")
+                .navigationDestination(for: Book.self) { book in
+                    BookDetailView(detailVM: DetailViewModel(book: book))
                 }
             }
-            .navigationTitle("BookStory")
-            .navigationDestination(for: Book.self) { book in
-                BookDetailView(detailVM: DetailViewModel(book: book))
-            }
-            .refreshable {
-                await vm.getBooks()
+        }
+        .searchable(text: $vm.search)
+        .onChange(of: vm.search) { newValue in
+            if newValue == "" {
+                
+            } else {
+                Task {
+                    do {
+                        await vm.findBook(search: vm.search)
+                    }
+                }
             }
         }
         .alert("Connection Error", isPresented: $vm.showAlert) {

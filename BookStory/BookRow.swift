@@ -27,7 +27,7 @@ struct BookRow: View {
                 VStack(alignment: .leading) {
                     Text("\(detailVM.book.title)")
                         .font(.headline)
-                    Text("\(detailVM.author)")
+                    Text("\(detailVM.authorName)")
                         .font(.callout)
                     Text("\(detailVM.book.plot ?? "")")
                         .font(.caption2)
