@@ -19,7 +19,7 @@ struct LatestView: View {
         NavigationStack {
             List(vm.latest) { book in
                 NavigationLink(value: book) {
-                    BookRow(detailVM: DetailViewModel(book: book))
+                    BookRow(detailVM: DetailViewModel(book: book, booksVM: vm))
                 }
             }
             .navigationTitle("Latest Books")

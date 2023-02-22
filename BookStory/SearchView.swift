@@ -19,12 +19,12 @@ struct SearchView: View {
             } else {
                 List(booksVM.bookSearch) { book in
                     NavigationLink(value: book) {
-                        BookRow(detailVM: DetailViewModel(book: book))
+                        BookRow(detailVM: DetailViewModel(book: book, booksVM: booksVM))
                     }
                 }
                 .navigationTitle("BookStory")
                 .navigationDestination(for: Book.self) { book in
-                    BookDetailView(detailVM: DetailViewModel(book: book))
+                    BookDetailView(detailVM: DetailViewModel(book: book, booksVM: booksVM))
                 }
                 .refreshable {
                     await booksVM.findBook(search: booksVM.search)

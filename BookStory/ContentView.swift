@@ -20,12 +20,12 @@ struct ContentView: View {
             if vm.search.isEmpty {
                 List(vm.books) { book in
                     NavigationLink(value: book) {
-                        BookRow(detailVM: DetailViewModel(book: book))
+                        BookRow(detailVM: DetailViewModel(book: book, booksVM: vm))
                     }
                 }
                 .navigationTitle("BookStory")
                 .navigationDestination(for: Book.self) { book in
-                    BookDetailView(detailVM: DetailViewModel(book: book))
+                    BookDetailView(detailVM: DetailViewModel(book: book, booksVM: vm))
                 }
                 .refreshable {
                     await vm.getBooks()
@@ -33,12 +33,12 @@ struct ContentView: View {
             } else {
                 List(vm.bookSearch) { book in
                     NavigationLink(value: book) {
-                        BookRow(detailVM: DetailViewModel(book: book))
+                        BookRow(detailVM: DetailViewModel(book: book, booksVM: vm))
                     }
                 }
                 .navigationTitle("BookStory")
                 .navigationDestination(for: Book.self) { book in
-                    BookDetailView(detailVM: DetailViewModel(book: book))
+                    BookDetailView(detailVM: DetailViewModel(book: book, booksVM: vm))
                 }
             }
         }

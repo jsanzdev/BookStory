@@ -9,6 +9,7 @@ import SwiftUI
 
 struct BookRow: View {
     @ObservedObject var detailVM:DetailViewModel
+    @EnvironmentObject var vm:BooksViewModel
     
     var body: some View {
         VStack {
@@ -48,6 +49,7 @@ struct BookRow: View {
 
 struct BookRow_Previews: PreviewProvider {
     static var previews: some View {
-        BookRow(detailVM: DetailViewModel(book: .bookTest))
+        BookRow(detailVM: DetailViewModel(book: .bookTest, booksVM: BooksViewModel()))
+            .environmentObject(BooksViewModel())
     }
 }

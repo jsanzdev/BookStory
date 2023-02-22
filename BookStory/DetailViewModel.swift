@@ -10,15 +10,15 @@ import Combine
 
 final class DetailViewModel:ObservableObject {
     
-    let booksVM = BooksViewModel()
-    let persistence = NetworkPersistence()
+    let booksVM:BooksViewModel
     
     let book:Book
     
     @Published var authorName = ""
     
-    init(book:Book) {
+    init(book:Book, booksVM:BooksViewModel) {
         self.book = book
+        self.booksVM = booksVM
         authorName = booksVM.getAuthorByID(id: book.author)?.name ?? "Author not found"
     }
 }
