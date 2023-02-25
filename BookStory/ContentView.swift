@@ -17,36 +17,60 @@ struct ContentView: View {
     
     var body: some View {
         NavigationStack {
-            if vm.search.isEmpty {
-                List(vm.books) { book in
-                    NavigationLink(value: book) {
-                        BookRow(detailVM: DetailViewModel(book: book, booksVM: vm))
+            ScrollView {
+                VStack(alignment: .leading) {
+                    Text("Latest Books")
+                        .font(.title2)
+                    ScrollView(.horizontal) {
+                        LazyHGrid(rows: [GridItem(.adaptive(minimum:90))]) {
+                            ForEach(vm.latest, id:\.self) { book in
+                                NavigationLink(value: book) {
+                                    BookCover(detailVM: DetailViewModel(book: book, booksVM: vm))
+                                }
+                            }
+                        }
+                    }
+                    .frame(height: 150)
+                }
+                .padding()
+                LazyVStack {
+                    if vm.search.isEmpty {
+                        ForEach(vm.books, id:\.self) { book in
+                            NavigationLink(value: book) {
+                                BookRow(detailVM: DetailViewModel(book: book, booksVM: vm))
+                            }
+                        }
+                    } else {
+                        ForEach(vm.books, id:\.self) { book in
+                            NavigationLink(value: book) {
+                                BookRow(detailVM: DetailViewModel(book: book, booksVM: vm))
+                            }
+                        }
                     }
                 }
-                .navigationTitle("BookStory")
-                .navigationDestination(for: Book.self) { book in
-                    BookDetailView(detailVM: DetailViewModel(book: book, booksVM: vm))
-                }
-                .refreshable {
+                .padding()
+                .buttonStyle(.plain)
+            }
+            .navigationTitle("BookStory")
+            .navigationDestination(for: Book.self) { book in
+                BookDetailView(detailVM: DetailViewModel(book: book, booksVM: vm))
+            }
+        }
+        .refreshable {
+            await vm.getBooks()
+            await vm.getLatest()
+        }
+        .searchable(text: $vm.search)
+        .onAppear {
+            Task {
+                do {
+                    await vm.getLatest()
                     await vm.getBooks()
-                }
-            } else {
-                List(vm.bookSearch) { book in
-                    NavigationLink(value: book) {
-                        BookRow(detailVM: DetailViewModel(book: book, booksVM: vm))
-                    }
-                }
-                .navigationTitle("BookStory")
-                .navigationDestination(for: Book.self) { book in
-                    BookDetailView(detailVM: DetailViewModel(book: book, booksVM: vm))
                 }
             }
         }
-        .searchable(text: $vm.search)
         .onChange(of: vm.search) { newValue in
-            if newValue == "" {
-                
-            } else {
+            if newValue != "" {
                 Task {
                     do {
                         await vm.findBook(search: vm.search)
@@ -63,11 +87,10 @@ struct ContentView: View {
         }
         .overlay {
             if vm.loading {
-            LoadingView()
+                LoadingView()
                     .transition(.opacity)
             }
         }
-    
     }
 }
 

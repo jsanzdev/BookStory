@@ -33,6 +33,8 @@ struct BookDetailView: View {
                             VStack (alignment: .leading){
                                 Text("\(detailVM.authorName)")
                                     .font(.title)
+                                Text("\(detailVM.book.price, specifier: "%.2f")$")
+                                    .font(.title)
                                 Spacer()
                                 Text("Year: \(detailVM.book.year)")
                                 Text("Pages: \(detailVM.book.pages ?? 0)")

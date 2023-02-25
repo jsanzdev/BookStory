@@ -36,7 +36,8 @@ struct BookRow: View {
                     HStack {
                         RatingView(rating: detailVM.book.rating?.toInt() ?? 0)
                         Spacer()
-                        Text("Year: \(detailVM.book.year)")
+                        Text("\(detailVM.book.price, specifier: "%.2f")$")
+                            .font(.title2)
                     }
                     .font(.caption)
                 }

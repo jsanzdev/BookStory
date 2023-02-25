@@ -17,17 +17,21 @@ struct LatestView: View {
     
     var body: some View {
         NavigationStack {
-            List(vm.latest) { book in
-                NavigationLink(value: book) {
-                    BookRow(detailVM: DetailViewModel(book: book, booksVM: vm))
+            ScrollView{
+                LazyVGrid(columns: [GridItem(.adaptive(minimum: 130))]) {
+                    ForEach(vm.latest, id:\.self) { book in
+                        NavigationLink(value: book) {
+                            BookCover(detailVM: DetailViewModel(book: book, booksVM: vm))
+                        }
+                    }
                 }
-            }
-            .navigationTitle("Latest Books")
-            .navigationDestination(for: Book.self) { book in
-                // Add detail view here :)
-            }
-            .refreshable {
-                await vm.getLatest()
+                .navigationTitle("Latest Books")
+                .navigationDestination(for: Book.self) { book in
+                    // Add detail view here :)
+                }
+                .refreshable {
+                    await vm.getLatest()
+                }
             }
         }
         .onAppear {
@@ -46,7 +50,7 @@ struct LatestView: View {
         }
         .overlay {
             if vm.loading {
-            LoadingView()
+                LoadingView()
                     .transition(.opacity)
             }
         }

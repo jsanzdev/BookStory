@@ -14,10 +14,6 @@ struct TabController: View {
                 .tabItem {
                     Label("Store", systemImage: "books.vertical.fill")
                 }
-            LatestView()
-                .tabItem {
-                    Label("Latests", systemImage: "book.closed.fill")
-                }
             ReadView()
                 .tabItem {
                     Label("Read", systemImage: "bookmark.fill")
