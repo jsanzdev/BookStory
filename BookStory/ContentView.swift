@@ -41,7 +41,7 @@ struct ContentView: View {
                             }
                         }
                     } else {
-                        ForEach(vm.books, id:\.self) { book in
+                        ForEach(vm.bookSearch, id:\.self) { book in
                             NavigationLink(value: book) {
                                 BookRow(detailVM: DetailViewModel(book: book, booksVM: vm))
                             }
