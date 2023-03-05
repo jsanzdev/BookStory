@@ -15,65 +15,103 @@ struct UserView: View {
     
     @Environment(\.dismiss) var dismiss
     
+    @State var userUpdated = false
+    @State var showAlert = false
+    @State var alertMsg = ""
+    
     var body: some View {
-        Form {
-            Section {
-                CustomTextField(label: "Name",
-                                placeholder: "Enter your Name",
-                                text: $userVM.name,
-                                validation: booksVM.validateEmpty)
+        NavigationStack {
+            Form {
+                Section {
+                    CustomTextField(label: "Name",
+                                    placeholder: "Enter your Name",
+                                    text: $userVM.name,
+                                    validation: booksVM.validateEmpty)
                     .textContentType(.name)
                     .textInputAutocapitalization(.words)
                     .focused($field, equals: .name)
-                CustomTextField(label: "Email",
-                                placeholder: "Enter your email address",
-                                text: $userVM.email,
-                                validation: booksVM.validateEmail)
+                    CustomTextField(label: "Email",
+                                    placeholder: "Enter your email address",
+                                    text: $userVM.email,
+                                    validation: booksVM.validateEmail)
                     .textContentType(.emailAddress)
                     .textInputAutocapitalization(.never)
                     .autocorrectionDisabled()
                     .focused($field, equals: .email)
                     .keyboardType(.emailAddress)
-                CustomTextField(label: "Address",
-                                placeholder: "Enter your Address",
-                                text: $userVM.location,
-                                validation: booksVM.validateEmpty)
+                    CustomTextField(label: "Address",
+                                    placeholder: "Enter your Address",
+                                    text: $userVM.location,
+                                    validation: booksVM.validateEmpty)
                     .textContentType(.fullStreetAddress)
                     .textInputAutocapitalization(.words)
                     .focused($field, equals: .location)
-            } header: {
-                Text("Your Details")
+                } header: {
+                    Text("Edit Your Details")
+                }
+                Button(role: .destructive)  {
+                    booksVM.user = User(email: "")
+                    booksVM.screenState = .loginScreen
+                } label : {
+                    Label("Logout", systemImage: "power")
+                        .foregroundColor(.red)
+                }
             }
-        }
-        .navigationTitle("Edit your details")
-        .navigationBarTitleDisplayMode(.inline)
-        .toolbar {
-            ToolbarItem(placement: .keyboard) {
-                HStack {
-                    Button {
-                        field?.prev()
-                    } label: {
-                        Image(systemName: "chevron.up")
+            .navigationTitle("Your Account")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .keyboard) {
+                    HStack {
+                        Button {
+                            field?.prev()
+                        } label: {
+                            Image(systemName: "chevron.up")
+                        }
+                        Button {
+                            field?.next()
+                        } label: {
+                            Image(systemName: "chevron.down")
+                        }
+                        Spacer()
+                        Button {
+                            field = nil
+                        } label: {
+                            Image(systemName: "keyboard")
+                        }
                     }
+                }
+                ToolbarItem(placement: .confirmationAction) {
                     Button {
-                        field?.next()
+                        Task {
+                            if await booksVM.createUser(user: User(name: userVM.name, location: userVM.location, email: userVM.email, role: .user)) {
+                                userUpdated.toggle()
+                                alertMsg = "Now you can login"
+                            } else {
+                                showAlert.toggle()
+                                alertMsg = "Error, try again later"
+                            }
+                        }
                     } label: {
-                        Image(systemName: "chevron.down")
-                    }
-                    Spacer()
-                    Button {
-                        field = nil
-                    } label: {
-                        Image(systemName: "keyboard")
+                        Text("Save")
                     }
                 }
             }
-            ToolbarItem(placement: .confirmationAction) {
+            .alert("User Updated", isPresented: $userUpdated) {
+                Button {
+                } label: {
+                    Text("OK")
+                }
+            } message: {
+                Text(alertMsg)
+            }
+            .alert("Error", isPresented: $showAlert) {
                 Button {
                     
                 } label: {
-                    Text("Save")
+                    Text("OK")
                 }
+            } message: {
+                Text(alertMsg)
             }
         }
     }
