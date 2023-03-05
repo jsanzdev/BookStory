@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct TabController: View {
+    @EnvironmentObject var booksVM:BooksViewModel
+    
     var body: some View {
         TabView {
             ContentView()
@@ -17,6 +19,10 @@ struct TabController: View {
             ReadView()
                 .tabItem {
                     Label("Read", systemImage: "bookmark.fill")
+                }
+            UserView(userVM: UserViewModel(user: booksVM.user))
+                .tabItem {
+                    Label("Account", systemImage: "person.fill")
                 }
         }
     }

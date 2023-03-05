@@ -30,6 +30,20 @@ final class NetworkPersistence {
         try await queryJSON(request: .request(url: .findAuthor(id: id)), type: Author.self)
     }
     
+    func getUser(email:String) async throws -> User {
+        let user = User(email: email)
+        return try await queryJSON(request: .request(url: .findUser, method: .post, body: user), type: User.self)
+    }
+    
+    func createUser(user: User) async throws -> Bool {
+        try await queryJSON(request: .request(url: .user, method: .post, body: user))
+    }
+    
+//    func getReadBooks(email: String) async throws -> [Book] {
+//        let readBooks:[Int] = []
+//        try await queryJSON(request: .request(url: .getReadBooks), type: readBooks.self)
+//    }
+    
     
     func queryJSON<T:Codable>(request:URLRequest, type:T.Type, decoder:JSONDecoder = JSONDecoder(), statusOK:Int = 200) async throws -> T {
         do {

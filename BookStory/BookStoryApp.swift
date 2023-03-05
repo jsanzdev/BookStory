@@ -16,7 +16,12 @@ struct BookStoryApp: App {
     var body: some Scene {
         WindowGroup {
             VStack {
-                TabController()
+                switch booksVM.screenState {
+                case .loginScreen:
+                    LoginView()
+                case .userLogged:
+                    TabController()
+                }
             }
             .overlay {
                 if monitorNetwork.status == .offline {

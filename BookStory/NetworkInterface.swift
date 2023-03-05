@@ -57,6 +57,14 @@ extension URL {
     static func findAuthor(id: String) -> URL {
         serverURL.appending(component: "\(bookAPI)").appending(component: "authors").appending(component: "\(id)")
     }
+    
+    static let clientAPI = "client"
+    
+    static let user = serverURL.appending(component: "\(clientAPI)")
+
+    static let findUser = serverURL.appending(component: "\(clientAPI)").appending(component: "query")
+    
+    static let getReadBooks = serverURL.appending(component: "\(clientAPI)").appending(component: "ReadedBooks")
 }
 
 
