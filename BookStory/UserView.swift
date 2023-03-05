@@ -58,7 +58,6 @@ struct UserView: View {
                 }
             }
             .navigationTitle("Your Account")
-            .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .keyboard) {
                     HStack {

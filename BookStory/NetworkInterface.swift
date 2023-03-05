@@ -64,7 +64,7 @@ extension URL {
 
     static let findUser = serverURL.appending(component: "\(clientAPI)").appending(component: "query")
     
-    static let getReadBooks = serverURL.appending(component: "\(clientAPI)").appending(component: "ReadedBooks")
+    static let getReadBooks = serverURL.appending(component: "\(clientAPI)").appending(component: "readedBooks")
 }
 
 

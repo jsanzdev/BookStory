@@ -30,6 +30,8 @@ final class BooksViewModel:ObservableObject {
     @Published var search = ""
     @Published var bookSearch:[Book] = []
     
+    @Published var read:[Int] = []
+    
     
     var subscribers = Set<AnyCancellable>()
     
@@ -89,6 +91,7 @@ final class BooksViewModel:ObservableObject {
     @MainActor func loginUser(email:String) async -> Bool {
         do {
             user = try await persistence.getUser(email: email)
+            //read = try await persistence.getReadBooks(email: user.email).books
             return true
         } catch let error as APIErrors {
             errorMsg = error.description
@@ -115,9 +118,27 @@ final class BooksViewModel:ObservableObject {
         }
     }
     
+    @MainActor func getReadBooks() async {
+        loading = true
+        do {
+            read = try await persistence.getReadBooks(email: user.email).books
+        } catch let error as APIErrors {
+            errorMsg = error.description
+            showAlert.toggle()
+        } catch {
+            errorMsg = error.localizedDescription
+            showAlert.toggle()
+        }
+        loading = false
+    }
+    
     
     func getAuthorByID(id:String) -> Author? {
         authors.first(where: { $0.id == id })
+    }
+    
+    func getBookByID(id:Int) -> Book? {
+        books.first(where: { $0.id == id })
     }
     
     // MARK: - validations

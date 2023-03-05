@@ -44,6 +44,11 @@ struct User: Codable {
     var role:userRole? = nil
 }
 
+struct ReadBooks: Codable, Hashable {
+    var books:[Int]
+    var email: String
+}
+
 // MARK: - ScreenState
 
 enum screenState {

@@ -21,7 +21,6 @@ final class UserViewModel:ObservableObject {
     @Published var email = ""
     @Published var name = ""
     @Published var location = ""
-    //@Published var readBooks:Books = []
     
     init(user:User) {
         self.user = user
