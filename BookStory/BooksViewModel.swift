@@ -132,6 +132,23 @@ final class BooksViewModel:ObservableObject {
         loading = false
     }
     
+    @MainActor func readBookToggle(id: Int) async -> Bool {
+        loading = true
+        do {
+            try await persistence.readBooksToggle(readBooks: ReadBooks(books: [id], email: user.email))
+        } catch let error as APIErrors {
+            errorMsg = error.description
+            showAlert.toggle()
+            return false
+        } catch {
+            errorMsg = error.localizedDescription
+            showAlert.toggle()
+            return false
+        }
+        loading = false
+        return true
+    }
+    
     
     func getAuthorByID(id:String) -> Author? {
         authors.first(where: { $0.id == id })
@@ -173,5 +190,8 @@ final class BooksViewModel:ObservableObject {
         }
     }
     
-    
+    func isReaded(id:Int) -> Bool {
+        read.contains(where: {$0 == id} )
+    }
+
 }

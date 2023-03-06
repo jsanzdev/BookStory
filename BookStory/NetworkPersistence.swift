@@ -44,6 +44,10 @@ final class NetworkPersistence {
         return try await queryJSON(request: .request(url: .getReadBooks, method: .post, body: user), type: ReadBooks.self)
     }
     
+    func readBooksToggle(readBooks: ReadBooks) async throws -> Bool {
+        return try await queryJSON(request: .request(url: .readBooksToggle, method: .post, body: readBooks))
+    }
+    
     
     func queryJSON<T:Codable>(request:URLRequest, type:T.Type, decoder:JSONDecoder = JSONDecoder(), statusOK:Int = 200) async throws -> T {
         do {

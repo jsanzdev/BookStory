@@ -9,7 +9,7 @@ import SwiftUI
 
 struct BookRow: View {
     @ObservedObject var detailVM:DetailViewModel
-    @EnvironmentObject var vm:BooksViewModel
+    @EnvironmentObject var booksVM:BooksViewModel
     
     var body: some View {
         VStack {
@@ -26,8 +26,14 @@ struct BookRow: View {
                 .cornerRadius(10)
                 .shadow(radius: 10)
                 VStack(alignment: .leading) {
-                    Text("\(detailVM.book.title)")
-                        .font(.headline)
+                    HStack {
+                        Text("\(detailVM.book.title)")
+                            .font(.headline)
+                        Spacer()
+                        if booksVM.isReaded(id: detailVM.book.id) {
+                            Image(systemName: "bookmark.fill")
+                        }
+                    }
                     Text("\(detailVM.authorName)")
                         .font(.callout)
                     Text("\(detailVM.book.plot ?? "")")

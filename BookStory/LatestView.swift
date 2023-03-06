@@ -3,7 +3,7 @@
 //  BookStory
 //
 //  Created by Jesus Sanz on 19/2/23.
-//
+//  This is deprecated, we are using a different view inside content view
 
 import SwiftUI
 

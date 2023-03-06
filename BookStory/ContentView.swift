@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ContentView: View {
-    @EnvironmentObject var vm:BooksViewModel
+    @EnvironmentObject var booksVM:BooksViewModel
     
     let loading = NotificationCenter.default
         .publisher(for: .loading)
@@ -23,9 +23,9 @@ struct ContentView: View {
                         .font(.title2)
                     ScrollView(.horizontal) {
                         LazyHGrid(rows: [GridItem(.adaptive(minimum:90))]) {
-                            ForEach(vm.latest, id:\.self) { book in
+                            ForEach(booksVM.latest, id:\.self) { book in
                                 NavigationLink(value: book) {
-                                    BookCover(detailVM: DetailViewModel(book: book, booksVM: vm))
+                                    BookCover(detailVM: DetailViewModel(book: book, booksVM: booksVM))
                                 }
                             }
                         }
@@ -34,16 +34,16 @@ struct ContentView: View {
                 }
                 .padding()
                 LazyVStack {
-                    if vm.search.isEmpty {
-                        ForEach(vm.books, id:\.self) { book in
+                    if booksVM.search.isEmpty {
+                        ForEach(booksVM.books, id:\.self) { book in
                             NavigationLink(value: book) {
-                                BookRow(detailVM: DetailViewModel(book: book, booksVM: vm))
+                                BookRow(detailVM: DetailViewModel(book: book, booksVM: booksVM))
                             }
                         }
                     } else {
-                        ForEach(vm.bookSearch, id:\.self) { book in
+                        ForEach(booksVM.bookSearch, id:\.self) { book in
                             NavigationLink(value: book) {
-                                BookRow(detailVM: DetailViewModel(book: book, booksVM: vm))
+                                BookRow(detailVM: DetailViewModel(book: book, booksVM: booksVM))
                             }
                         }
                     }
@@ -53,40 +53,42 @@ struct ContentView: View {
             }
             .navigationTitle("BookStory")
             .navigationDestination(for: Book.self) { book in
-                BookDetailView(detailVM: DetailViewModel(book: book, booksVM: vm))
+                BookDetailView(detailVM: DetailViewModel(book: book, booksVM: booksVM))
             }
         }
         .refreshable {
-            await vm.getBooks()
-            await vm.getLatest()
+            await booksVM.getBooks()
+            await booksVM.getLatest()
+            await booksVM.getReadBooks()
         }
-        .searchable(text: $vm.search)
+        .searchable(text: $booksVM.search)
         .onAppear {
             Task {
                 do {
-                    await vm.getLatest()
-                    await vm.getBooks()
+                    await booksVM.getLatest()
+                    await booksVM.getBooks()
+                    await booksVM.getReadBooks()
                 }
             }
         }
-        .onChange(of: vm.search) { newValue in
+        .onChange(of: booksVM.search) { newValue in
             if newValue != "" {
                 Task {
                     do {
-                        await vm.findBook(search: vm.search)
+                        await booksVM.findBook(search: booksVM.search)
                     }
                 }
             }
         }
-        .alert("Connection Error", isPresented: $vm.showAlert) {
+        .alert("Connection Error", isPresented: $booksVM.showAlert) {
             Button(action: {}) {
                 Text("OK")
             }
         } message: {
-            Text(vm.errorMsg)
+            Text(booksVM.errorMsg)
         }
         .overlay {
-            if vm.loading {
+            if booksVM.loading {
                 LoadingView()
                     .transition(.opacity)
             }
@@ -95,12 +97,12 @@ struct ContentView: View {
 }
 
 struct ContentView_Previews: PreviewProvider {
-    static let vm = BooksViewModel()
+    static let booksVM = BooksViewModel()
     static var previews: some View {
         ContentView()
-            .environmentObject(vm)
+            .environmentObject(booksVM)
             .task {
-                await vm.getBooks()
+                await booksVM.getBooks()
             }
     }
 }
